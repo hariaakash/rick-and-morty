@@ -8,7 +8,7 @@ type Props = {
 
 const CharacterList = ({ characters }: Props) => {
   return (
-    <div className="grid grid-cols-4 grid-flow-row gap-4 content-center">
+    <div className="grid grid-cols-2 md:grid-cols-5 grid-flow-row gap-4 content-center">
       {
         characters.map((character) => {
           const { id } = character
