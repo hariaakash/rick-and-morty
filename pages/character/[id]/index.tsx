@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from 'next'
-import type { Character, Location, CharacterLocation } from 'rickmortyapi/dist/interfaces'
+import type { Character, Location, Episode, CharacterLocation } from 'rickmortyapi/dist/interfaces'
 import get from 'lodash/get'
-import { getCharacter, getLocation } from 'rickmortyapi'
+import { getCharacter, getEpisode, getLocation } from 'rickmortyapi'
 // import useCharacterStore from '../../../store/character'
 
 import GlobalHead from '../../../components/Global/GlobalHead'
@@ -19,13 +19,20 @@ const fetchLocation = async (place: CharacterLocation) => {
   return null
 };
 
+const fetchEpisodes = async (episodes: string[]) => {
+  const ids = episodes.map((x) => Number(x.split('/').slice(-1)))
+  const { data } = await getEpisode(ids)
+  return data
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
   const { data: character } = await getCharacter(Number(id))
 
-  const [origin, location] = await Promise.all([
+  const [origin, location, episodes] = await Promise.all([
     fetchLocation(character.origin),
     fetchLocation(character.location),
+    fetchEpisodes(character.episode)
   ])
 
   return {
@@ -33,6 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       character,
       origin,
       location,
+      episodes,
     },
   }
 }
@@ -41,15 +49,13 @@ type Props = {
   character: Character,
   location: Location,
   origin: Location,
+  episodes: Episode[],
 }
 
-const Home: NextPage<Props> = ({ character, location, origin }) => {
+const Home: NextPage<Props> = ({ character, location, origin, episodes }) => {
   // const setCharacter = useCharacterStore((state) => state.setCharacter)
   // setCharacter(data)
   // const character = useCharacterStore((state) => state.character)
-  // console.log(character)
-  // console.log(location)
-  // console.log(origin)
 
   return (
     <div className="container-fluid">
@@ -64,7 +70,7 @@ const Home: NextPage<Props> = ({ character, location, origin }) => {
       {
         character &&
         <div className="flex flex-col md:flex-row">
-          <div className="basis-1/2 flex justify-center">
+          <div className="basis-1/3 flex justify-center">
             {
               character &&
               <Image
@@ -76,10 +82,24 @@ const Home: NextPage<Props> = ({ character, location, origin }) => {
               />
             }
           </div>
-          <div className="basis-1/2 flex flex-col">
+          <div className="basis-1/3 flex flex-col">
             <CharacterBasic character={character} />
             <CharacterLocationInfo location={origin} title="Origin" />
             <CharacterLocationInfo location={location} title="Last Seen" />
+          </div>
+          <div className="basis-1/3 flex flex-col">
+            <h1 className="text-3xl text-blue-400">Episodes List</h1>
+            <div className="overflow-y-auto h-64">
+              <ul>
+                {
+                  episodes.map((episode) => {
+                    return (
+                      <li key={episode.id}>{ episode.episode } - { episode.name } - { episode.air_date }</li>
+                    )
+                  })
+                }
+              </ul>
+            </div>
           </div>
         </div>
       }
