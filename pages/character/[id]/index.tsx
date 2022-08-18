@@ -5,7 +5,7 @@ import { getCharacter } from 'rickmortyapi'
 import CharacterCard from '../../../components/Character/CharacterCard'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query;
+  const { id } = context.query
   const { data } = await getCharacter(Number(id))
 
   return {

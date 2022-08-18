@@ -1,37 +1,30 @@
-import type { Pagination } from '../../types';
+import type { Pagination } from '../../types'
 
 type Props = {
   pagination: Pagination,
   updatePage: Function,
 }
 
-const GlobalPagination = ({ pagination, updatePage }:Props) => {
-  
+const GlobalPagination = ({ pagination, updatePage }: Props) => {
+  const { page, pages } = pagination
+  const prevDisabled = page === 1
+  const nextDisabled = page === pages
   return (
-    <div className="py-2">
-      <nav className="block"></nav>
-      <div>
-        <nav
-          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-          aria-label="Pagination"
-        >
-          <button
-            disabled={pagination.page === 1}
-            onClick={() => updatePage(pagination.page - 1)}
-            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span>Previous</span>
-          </button>
-
-          <button
-            disabled={pagination.page === pagination.pages}
-            onClick={() => updatePage(pagination.page + 1)}
-            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span>Next</span>
-          </button>
-        </nav>
-      </div>
+    <div className="py-4 flex flex-row justify-center space-x-2">
+      <button
+        className="px-5 py-2.5 font-medium bg-blue-50 hover:bg-blue-100 hover:text-blue-600 text-blue-500 rounded-lg text-sm"
+        disabled={prevDisabled}
+        onClick={() => updatePage(page - 1)}
+      >
+        Previous  
+      </button>
+      <button
+        className="px-5 py-2.5 font-medium bg-blue-50 hover:bg-blue-100 hover:text-blue-600 text-blue-500 rounded-lg text-sm"
+        disabled={nextDisabled}
+        onClick={() => updatePage(page + 1)}
+      >
+        Next
+      </button>
     </div>
   )
 }

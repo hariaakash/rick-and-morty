@@ -6,7 +6,7 @@ type Props = {
   characters: Character[]
 }
 
-const CharacterList = ({ characters }:Props) => {
+const CharacterList = ({ characters }: Props) => {
   return (
     <div className="grid grid-cols-4 grid-flow-row gap-4 content-center">
       {

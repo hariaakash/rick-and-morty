@@ -1,9 +1,9 @@
 import type { NextPage, GetServerSideProps } from 'next'
 import type { Character } from 'rickmortyapi/dist/interfaces'
-import type { ApiData } from '../types';
+import type { ApiData } from '../types'
 
 import { getCharacters } from 'rickmortyapi'
-import { useState } from "react";
+import { useState } from "react"
 
 import GlobalHead from '../components/Global/GlobalHead'
 import GlobalPagination from '../components/Global/GlobalPagination'
@@ -24,17 +24,17 @@ type Props = {
 }
 
 const Home: NextPage<Props> = ({ data }) => {
-  const { results: defaultResults = [], info } = data;
+  const { results: defaultResults = [], info } = data
 
   const [pagination, setPagination] = useState({
     page: 1,
     pages: info.pages,
     total: info.count,
-  });
-  const [characters, setCharacters] = useState(defaultResults);
+  })
+  const [characters, setCharacters] = useState(defaultResults)
 
   const updatePage = async (page: number) => {
-    const { data: { results = [] } } = await getCharacters({ page });
+    const { data: { results = [] } } = await getCharacters({ page })
     setPagination({ ...pagination, page })
     setCharacters(results)
   }
