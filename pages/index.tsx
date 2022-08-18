@@ -41,7 +41,7 @@ const Home: NextPage<Props> = ({ data }) => {
 
   return (
     <div className="container-fluid">
-      <GlobalHead />
+      <GlobalHead title="Rick & Morty" />
       {/* <Search /> */}
       <CharacterList characters={characters} />
       <GlobalPagination pagination={pagination} updatePage={updatePage} />
